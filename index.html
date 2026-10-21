@@ -22,13 +22,9 @@
     </div>
     <div class="flex items-center gap-2">
       <a href="https://www.google.com/maps/dir/?api=1&destination=14+rue+de+la+Guyane%2C+Nantes+44200" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg text-white hover:brightness-110" style="background:#1f4d3d" title="Itinéraire vers le dépôt">
-        <i data-icon="lucide:map-pin" data-size="16px"></i>
+        <i data-icon="lucide:map-pin" data-size="16px" data-color="#ffffff"></i>
         <span class="hidden sm:inline">Itinéraire</span>
       </a>
-      <button type="button" class="copyAddrBtn flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg border border-stone-300 hover:bg-stone-50 text-stone-600" title="Copier l'adresse">
-        <i data-icon="lucide:copy" data-size="16px"></i>
-        <span class="hidden sm:inline copyAddrLabel">Copier l'adresse</span>
-      </button>
       <span id="lastSync" class="hidden sm:inline text-xs text-stone-400"></span>
     </div>
   </div>
@@ -51,13 +47,6 @@
           <option value="yes">Disponible</option>
           <option value="no">Indisponible</option>
         </select>
-        <div class="flex rounded-xl border border-stone-300 overflow-hidden">
-          <button id="viewGrid" class="px-3 py-2.5 bg-[#1f4d3d] text-white"><i data-icon="lucide:grid-2x2" data-size="16px"></i></button>
-          <button id="viewList" class="px-3 py-2.5 bg-white text-stone-600"><i data-icon="lucide:list" data-size="16px"></i></button>
-        </div>
-        <a href="https://www.google.com/maps/dir/?api=1&destination=14+rue+de+la+Guyane%2C+Nantes+44200" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-sm px-3 py-2.5 rounded-xl border border-stone-300 hover:bg-stone-50" title="Itinéraire vers le dépôt">
-          <i data-icon="lucide:map-pin" data-size="16px"></i> Itinéraire
-        </a>
         <button type="button" class="copyAddrBtn flex items-center gap-1.5 text-sm px-3 py-2.5 rounded-xl border border-stone-300 hover:bg-stone-50" title="Copier l'adresse">
           <i data-icon="lucide:copy" data-size="16px"></i> <span class="copyAddrLabel">Copier</span>
         </button>
@@ -68,9 +57,32 @@
   </section>
 
   <section id="gridView" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></section>
-  <section id="listView" class="hidden bg-white rounded-2xl border border-stone-200 shadow-sm overflow-x-auto"></section>
 
-  <p class="text-xs text-stone-400 flex items-center gap-1.5"><i data-icon="lucide:info" data-size="14px"></i> Données synchronisées en temps réel avec notre base partagée — identiques pour tous les visiteurs.</p>
+  <section class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5">
+    <h2 class="font-bold text-lg text-[#1f4d3d] mb-4 flex items-center gap-2"><i data-icon="lucide:users" data-size="18px"></i>Contact</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#1f4d3d]/10 text-[#1f4d3d] flex items-center justify-center shrink-0">
+          <i data-icon="lucide:user" data-size="18px"></i>
+        </div>
+        <div>
+          <p class="font-semibold text-sm">Thibault Garnier</p>
+          <a href="tel:+33661359165" class="flex items-center gap-1.5 text-xs text-stone-500 hover:text-[#1f4d3d] mt-1"><i data-icon="lucide:phone" data-size="13px"></i>06 61 35 91 65</a>
+          <a href="mailto:thib.garnier@brezillon.fr" class="flex items-center gap-1.5 text-xs text-stone-500 hover:text-[#1f4d3d] mt-0.5"><i data-icon="lucide:mail" data-size="13px"></i>thib.garnier@brezillon.fr</a>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#1f4d3d]/10 text-[#1f4d3d] flex items-center justify-center shrink-0">
+          <i data-icon="lucide:user" data-size="18px"></i>
+        </div>
+        <div>
+          <p class="font-semibold text-sm">Stéphane Olivier</p>
+          <a href="tel:+33664375852" class="flex items-center gap-1.5 text-xs text-stone-500 hover:text-[#1f4d3d] mt-1"><i data-icon="lucide:phone" data-size="13px"></i>06 64 37 58 52</a>
+          <a href="mailto:s.olivier@brezillon.fr" class="flex items-center gap-1.5 text-xs text-stone-500 hover:text-[#1f4d3d] mt-0.5"><i data-icon="lucide:mail" data-size="13px"></i>s.olivier@brezillon.fr</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <script src="data.js"></script>

@@ -14,7 +14,6 @@ try{
 }
 
 let stock = [];
-let currentView = 'grid';
 
 const catLabel = (id) => (CATEGORIES.find(c=>c.id===id)||{}).label || id;
 const catIcon = (id) => (CATEGORIES.find(c=>c.id===id)||{}).icon || 'lucide:boxes';
@@ -116,47 +115,10 @@ function renderGrid(items){
     </div>`).join('');
 }
 
-function renderList(items){
-  const el = document.getElementById('listView');
-  if(items.length === 0){
-    el.innerHTML = `<p class="text-center text-stone-400 py-10">Aucun matériau ne correspond à votre recherche.</p>`;
-    return;
-  }
-  el.innerHTML = `
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="text-left text-stone-500 border-b border-stone-200 bg-stone-50">
-          <th class="px-4 py-3 font-medium"></th>
-          <th class="px-4 py-3 font-medium">Matériau</th>
-          <th class="px-4 py-3 font-medium">Catégorie</th>
-          <th class="px-4 py-3 font-medium">Quantité</th>
-          <th class="px-4 py-3 font-medium">Localisation</th>
-          <th class="px-4 py-3 font-medium">Statut</th>
-          <th class="px-4 py-3 font-medium">Maj</th>
-          <th class="px-4 py-3 font-medium">Fiche</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${items.map(i=>`
-          <tr class="border-b border-stone-100 hover:bg-stone-50">
-            <td class="px-4 py-3">${i.photo_url?`<img src="${i.photo_url}" class="w-10 h-10 object-cover rounded-lg" />`:`<div class="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center text-stone-300"><i data-icon="lucide:image" data-size="14px"></i></div>`}</td>
-            <td class="px-4 py-3 font-medium">${i.nom}</td>
-            <td class="px-4 py-3 text-stone-500">${catLabel(i.categorie)}</td>
-            <td class="px-4 py-3">${i.quantite} ${i.unite}</td>
-            <td class="px-4 py-3 text-stone-500">${i.localisation||'—'}</td>
-            <td class="px-4 py-3">${badgeFor(availStatus(i))}</td>
-            <td class="px-4 py-3 text-stone-400 text-xs">${timeAgo(i.maj)}</td>
-            <td class="px-4 py-3">${i.fiche_url?`<a href="${i.fiche_url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs text-[#1f4d3d] hover:underline"><i data-icon="lucide:file-text" data-size="13px"></i>PDF</a>`:'<span class="text-stone-300 text-xs">—</span>'}</td>
-          </tr>`).join('')}
-      </tbody>
-    </table>`;
-}
-
 function render(){
   const items = getFiltered();
   document.getElementById('resultCount').textContent = `${items.length} lot(s) affiché(s) sur ${stock.length} au total`;
   renderGrid(items);
-  renderList(items);
   renderSummary();
   if(window.icons) window.icons.replace();
 }
@@ -165,17 +127,6 @@ function render(){
   document.getElementById(id).addEventListener('input', render);
   document.getElementById(id).addEventListener('change', render);
 });
-
-function setView(view){
-  currentView = view;
-  document.getElementById('gridView').classList.toggle('hidden', view!=='grid');
-  document.getElementById('listView').classList.toggle('hidden', view!=='list');
-  document.getElementById('viewGrid').className = `px-3 py-2.5 ${view==='grid' ? 'bg-[#1f4d3d] text-white' : 'bg-white text-stone-600'}`;
-  document.getElementById('viewList').className = `px-3 py-2.5 ${view==='list' ? 'bg-[#1f4d3d] text-white' : 'bg-white text-stone-600'}`;
-  if(window.icons) window.icons.replace();
-}
-document.getElementById('viewGrid').addEventListener('click', ()=> setView('grid'));
-document.getElementById('viewList').addEventListener('click', ()=> setView('list'));
 
 // --- Copier l'adresse ---
 async function copyAddress(){
@@ -227,7 +178,7 @@ async function loadStock(){
       return;
     }
     stock = data || [];
-    connStatus.classList.add('hidden');
+    connStatus.style.display = 'none';
     render();
   }catch(e){
     connStatus.textContent = "Erreur réseau lors de la connexion à Supabase : " + (e.message || e);
@@ -236,7 +187,6 @@ async function loadStock(){
 }
 
 populateFilters();
-setView('grid');
 loadStock();
 
 if(sb){
