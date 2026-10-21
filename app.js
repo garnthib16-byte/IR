@@ -59,8 +59,6 @@ function renderSummary(){
         <p class="text-xs text-stone-500 leading-tight">${c.label}</p>
       </div>
     </div>`).join('');
-  const last = stock.reduce((a,b)=> { const t = new Date(b.maj).getTime(); return t > a ? t : a; }, 0);
-  document.getElementById('lastSync').textContent = last ? `Dernière mise à jour : ${timeAgo(last)}` : '';
   if(window.icons) window.icons.replace();
 }
 
