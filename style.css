@@ -1,0 +1,12 @@
+html,body{font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;}
+body{
+  background-image: linear-gradient(rgba(244,241,234,0.72), rgba(244,241,234,0.72)), url('/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+::-webkit-scrollbar{height:8px;width:8px;}
+::-webkit-scrollbar-thumb{background:#c9c0ad;border-radius:4px;}
+.card-hover{transition: transform .15s ease, box-shadow .15s ease;}
+.card-hover:hover{transform: translateY(-2px); box-shadow: 0 8px 20px rgba(31,77,61,0.12);}
