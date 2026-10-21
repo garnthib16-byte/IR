@@ -1,6 +1,6 @@
 html,body{font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;}
 body{
-  background-image: linear-gradient(rgba(244,241,234,0.72), rgba(244,241,234,0.72)), url('bg.jpg');
+  background-image: linear-gradient(rgba(244,241,234,0.5), rgba(244,241,234,0.5)), url('bg.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
