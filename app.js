@@ -128,39 +128,6 @@ function render(){
   document.getElementById(id).addEventListener('change', render);
 });
 
-// --- Copier l'adresse ---
-async function copyAddress(){
-  try{
-    await navigator.clipboard.writeText(FIXED_ADDRESS);
-    return true;
-  }catch(e){
-    try{
-      const ta = document.createElement('textarea');
-      ta.value = FIXED_ADDRESS;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      const ok = document.execCommand('copy');
-      document.body.removeChild(ta);
-      return ok;
-    }catch(e2){
-      return false;
-    }
-  }
-}
-document.querySelectorAll('.copyAddrBtn').forEach(btn=>{
-  const label = btn.querySelector('.copyAddrLabel');
-  btn.addEventListener('click', async ()=>{
-    const ok = await copyAddress();
-    const original = label ? label.textContent : btn.textContent;
-    if(label){ label.textContent = ok ? 'Copié !' : 'Erreur'; }
-    else { btn.textContent = ok ? 'Copié !' : 'Erreur'; }
-    setTimeout(()=>{ if(label){ label.textContent = original; } else { btn.textContent = original; } }, 1800);
-  });
-});
-
 // --- Connexion Supabase : chargement initial + temps réel ---
 const connStatus = document.getElementById('connStatus');
 
