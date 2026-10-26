@@ -130,9 +130,7 @@ function renderGrid(items){
       </div>
       ${i.notes?`<p class="text-xs text-stone-400 border-t border-stone-100 pt-2">${i.notes}</p>`:''}
       ${i.fiche_url ? `<a href="${i.fiche_url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-xs font-medium text-[#1f4d3d] hover:underline"><i data-icon="lucide:file-text" data-size="13px"></i>${i.fiche_nom || 'Fiche technique (PDF)'}</a>` : ''}
-      ${availStatus(i)==='yes'
-        ? `<button type="button" class="orderBtn mt-auto flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl text-white hover:brightness-110" style="background:#1f4d3d" data-id="${i.id}"><i data-icon="lucide:shopping-cart" data-size="16px" data-color="#ffffff"></i>Commander</button>`
-        : `<button type="button" disabled class="mt-auto flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-stone-200 text-stone-400 cursor-not-allowed">Commander</button>`}
+      <button type="button" class="orderBtn mt-auto flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl text-white hover:brightness-110" style="background:#1f4d3d" data-id="${i.id}"><i data-icon="lucide:shopping-cart" data-size="16px" data-color="#ffffff"></i>Commander</button>
     </div>`).join('');
 }
 
@@ -189,7 +187,6 @@ function openOrder(item){
   orderItem = item;
   document.getElementById('orderForm').reset();
   document.getElementById('orderMaterial').textContent = `${item.nom} — ${item.quantite} ${item.unite} disponibles`;
-  document.getElementById('o_quantite').max = item.quantite;
   hideEl(orderError);
   hideEl(orderSuccess);
   showEl(orderFormWrap);
