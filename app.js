@@ -2,6 +2,11 @@ const SUPABASE_URL = 'https://rsetoudhvhsyrxrbizwu.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_9sKeYqDz7nKXJlv4_g4KMQ_s9tLXquH';
 const FIXED_ADDRESS = '14 rue de la Guyane, Nantes 44200';
 
+// --- Formulaire de commande (envoi par mail via Web3Forms) ---
+// Remplacez cette valeur par la clé d'accès reçue par mail sur https://web3forms.com
+const WEB3FORMS_ACCESS_KEY = 'd06efd80-06bb-45db-8e84-81ef6a409b3f';
+const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+
 let sb = null;
 let supabaseLoadError = null;
 try{
@@ -125,6 +130,9 @@ function renderGrid(items){
       </div>
       ${i.notes?`<p class="text-xs text-stone-400 border-t border-stone-100 pt-2">${i.notes}</p>`:''}
       ${i.fiche_url ? `<a href="${i.fiche_url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-xs font-medium text-[#1f4d3d] hover:underline"><i data-icon="lucide:file-text" data-size="13px"></i>${i.fiche_nom || 'Fiche technique (PDF)'}</a>` : ''}
+      ${availStatus(i)==='yes'
+        ? `<button type="button" class="orderBtn mt-auto flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl text-white hover:brightness-110" style="background:#1f4d3d" data-id="${i.id}"><i data-icon="lucide:shopping-cart" data-size="16px" data-color="#ffffff"></i>Commander</button>`
+        : `<button type="button" disabled class="mt-auto flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-stone-200 text-stone-400 cursor-not-allowed">Commander</button>`}
     </div>`).join('');
 }
 
@@ -166,6 +174,91 @@ async function loadStock(){
     connStatus.className = 'text-xs rounded-lg px-3 py-2 bg-red-50 text-red-600';
   }
 }
+
+// --- Fenêtre de commande ---
+const showEl = (el, display) => { el.style.display = display || 'block'; };
+const hideEl = (el) => { el.style.display = 'none'; };
+
+const orderOverlay = document.getElementById('orderOverlay');
+const orderFormWrap = document.getElementById('orderFormWrap');
+const orderSuccess = document.getElementById('orderSuccess');
+const orderError = document.getElementById('orderError');
+let orderItem = null;
+
+function openOrder(item){
+  orderItem = item;
+  document.getElementById('orderForm').reset();
+  document.getElementById('orderMaterial').textContent = `${item.nom} — ${item.quantite} ${item.unite} disponibles`;
+  document.getElementById('o_quantite').max = item.quantite;
+  hideEl(orderError);
+  hideEl(orderSuccess);
+  showEl(orderFormWrap);
+  showEl(orderOverlay, 'flex');
+  if(window.icons) window.icons.replace();
+}
+function closeOrder(){ hideEl(orderOverlay); }
+
+document.getElementById('gridView').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.orderBtn');
+  if(!btn) return;
+  const item = stock.find(i => String(i.id) === btn.dataset.id);
+  if(item) openOrder(item);
+});
+document.getElementById('orderClose').addEventListener('click', closeOrder);
+document.getElementById('orderCancel').addEventListener('click', closeOrder);
+document.getElementById('orderDone').addEventListener('click', closeOrder);
+orderOverlay.addEventListener('click', (e)=>{ if(e.target === orderOverlay) closeOrder(); });
+
+async function sendOrder(){
+  const form = document.getElementById('orderForm');
+  const showErr = (m) => { orderError.textContent = m; showEl(orderError); };
+  hideEl(orderError);
+  if(!form.reportValidity()) return;
+  if(document.getElementById('o_botcheck').checked) return;
+  if(!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY.startsWith('REMPLACER')){
+    showErr("Le formulaire n'est pas encore configuré (clé d'envoi manquante).");
+    return;
+  }
+  const btn = document.getElementById('orderSend');
+  const label = btn.querySelector('span');
+  btn.disabled = true;
+  label.textContent = 'Envoi en cours...';
+  const val = (id) => document.getElementById(id).value.trim();
+  const payload = {
+    access_key: WEB3FORMS_ACCESS_KEY,
+    subject: `Demande de commande – ${orderItem.nom} (${val('o_quantite')} t)`,
+    from_name: 'Île Recycle – site matériaux',
+    name: val('o_nom'),
+    email: val('o_email'),
+    'Matériau': orderItem.nom,
+    'Quantité demandée (tonnes)': val('o_quantite'),
+    'Société / chantier': val('o_societe') || 'Non renseigné',
+    'Téléphone': val('o_tel'),
+    'Message': val('o_message') || '—'
+  };
+  try{
+    const res = await fetch(WEB3FORMS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(res.ok && data.success){
+      hideEl(orderFormWrap);
+      showEl(orderSuccess);
+      if(window.icons) window.icons.replace();
+    } else {
+      showErr(data.message || "L'envoi a échoué. Merci de réessayer.");
+    }
+  }catch(e){
+    showErr("Impossible d'envoyer la demande. Vérifiez votre connexion et réessayez, ou contactez-nous par téléphone.");
+  }finally{
+    btn.disabled = false;
+    label.textContent = 'Envoyer ma demande';
+  }
+}
+document.getElementById('orderSend').addEventListener('click', sendOrder);
+document.getElementById('orderForm').addEventListener('submit', (e)=>{ e.preventDefault(); sendOrder(); });
 
 populateFilters();
 loadStock();
