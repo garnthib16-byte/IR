@@ -15,8 +15,15 @@ try{
 
 let stock = [];
 
-const catLabel = (id) => (CATEGORIES.find(c=>c.id===id)||{}).label || id;
-const catIcon = (id) => (CATEGORIES.find(c=>c.id===id)||{}).icon || 'lucide:boxes';
+const findCat = (id) => CATEGORIES.find(c => String(c.id).toLowerCase() === String(id ?? '').trim().toLowerCase());
+const prettyCat = (id) => {
+  const known = findCat(id);
+  if(known) return known.label;
+  const s = String(id ?? '').trim();
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Autre';
+};
+const catLabel = prettyCat;
+const catIcon = (id) => (findCat(id) || {}).icon || 'lucide:boxes';
 
 function availStatus(item){
   return Number(item.quantite) > 0 ? 'yes' : 'no';
@@ -33,9 +40,17 @@ function timeAgo(ts){
   return `il y a ${d} j`;
 }
 
+// Le filtre se construit à partir des catégories réellement présentes dans la colonne "categorie" de Supabase
 function populateFilters(){
   const catSel = document.getElementById('categoryFilter');
-  catSel.innerHTML = '<option value="all">Toutes catégories</option>' + CATEGORIES.map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
+  const previous = catSel.value || 'all';
+  const cats = [...new Set(
+    stock.map(i => i.categorie).filter(c => c !== null && c !== undefined && String(c).trim() !== '')
+  )].sort((a,b) => prettyCat(a).localeCompare(prettyCat(b), 'fr'));
+  catSel.innerHTML = '';
+  catSel.add(new Option('Toutes catégories', 'all'));
+  cats.forEach(c => catSel.add(new Option(prettyCat(c), c)));
+  catSel.value = cats.map(String).includes(previous) ? previous : 'all';
 }
 
 function renderSummary(){
@@ -68,7 +83,7 @@ function getFiltered(){
   const av = document.getElementById('availFilter').value;
   return stock.filter(i=>{
     if(q && !(i.nom.toLowerCase().includes(q) || (i.notes||'').toLowerCase().includes(q))) return false;
-    if(cat !== 'all' && i.categorie !== cat) return false;
+    if(cat !== 'all' && String(i.categorie) !== cat) return false;
     if(av !== 'all' && availStatus(i) !== av) return false;
     return true;
   }).sort((a,b)=> (a.nom||'').localeCompare(b.nom||''));
@@ -144,6 +159,7 @@ async function loadStock(){
     }
     stock = data || [];
     connStatus.style.display = 'none';
+    populateFilters();
     render();
   }catch(e){
     connStatus.textContent = "Erreur réseau lors de la connexion à Supabase : " + (e.message || e);
