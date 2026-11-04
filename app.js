@@ -223,7 +223,7 @@ async function sendOrder(){
   const val = (id) => document.getElementById(id).value.trim();
   const payload = {
     access_key: WEB3FORMS_ACCESS_KEY,
-    subject: `Demande de commande – ${orderItem.nom} (${val('o_quantite')} t)`,
+    subject: `Demande de devis – ${orderItem.nom} (${val('o_quantite')} t)`,
     from_name: 'Île Recycle – site matériaux',
     name: val('o_nom'),
     email: val('o_email'),
