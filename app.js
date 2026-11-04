@@ -121,7 +121,7 @@ function renderGrid(items){
         ${badgeFor(availStatus(i))}
       </div>
       <div class="flex items-baseline gap-1">
-        <span class="text-2xl font-bold text-[#1f4d3d]">${i.quantite}</span>
+        <span class="text-2xl font-bold text-[#084a87]">${i.quantite}</span>
         <span class="text-xs text-stone-500">${i.unite}</span>
       </div>
       <div class="text-xs text-stone-500 space-y-1">
