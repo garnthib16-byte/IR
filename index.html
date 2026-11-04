@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Île Recycle – Matériaux disponibles</title>
 <link rel="icon" type="image/png" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="style.css" />
 <script src="icons.js"></script>
@@ -14,12 +17,10 @@
 
 <header class="sticky top-0 z-30 bg-white border-b border-stone-200 shadow-sm">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-    <div class="flex items-center justify-start">
-      <img src="logo.jpg" alt="Logo Île Recycle" class="h-11 w-auto shrink-0 rounded-md object-contain" />
-    </div>
-    <h1 class="text-center font-bold text-base sm:text-xl leading-tight" style="color:#786b54">Île Recycle <span style="color:#a3a938">: matériaux disponibles</span></h1>
+    <div></div>
+    <h1 class="text-center font-bold text-base sm:text-xl leading-tight" style="color:#0b5aa5">Île Recycle : matériaux disponibles</h1>
     <div class="flex items-center justify-end gap-2">
-      <a href="https://www.google.com/maps/dir/?api=1&destination=14+rue+de+la+Guyane%2C+Nantes+44200" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg text-white hover:brightness-110" style="background:#1f4d3d" title="Itinéraire vers le dépôt">
+      <a href="https://www.google.com/maps/dir/?api=1&destination=14+rue+de+la+Guyane%2C+Nantes+44200" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg text-white hover:brightness-110" style="background:#0b5aa5" title="Itinéraire vers le dépôt">
         <i data-icon="lucide:map-pin" data-size="16px" data-color="#ffffff"></i>
         <span class="hidden sm:inline">Itinéraire</span>
       </a>
@@ -123,7 +124,7 @@
         <p id="orderError" class="text-xs rounded-lg px-3 py-2 bg-red-50 text-red-600" style="display:none"></p>
         <div class="flex justify-end gap-2 pt-1">
           <button type="button" id="orderCancel" class="text-sm px-4 py-2 rounded-lg border border-stone-300 hover:bg-stone-50">Annuler</button>
-          <button type="button" id="orderSend" class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg text-white font-semibold hover:brightness-110" style="background:#1f4d3d">
+          <button type="button" id="orderSend" class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg text-white font-semibold hover:brightness-110" style="background:#0b5aa5">
             <i data-icon="lucide:send" data-size="16px" data-color="#ffffff"></i><span>Envoyer ma demande</span>
           </button>
         </div>
